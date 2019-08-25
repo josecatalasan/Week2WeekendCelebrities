@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Week2WeekendCelebrities</string>
+    <string name="title_activity_view_celebrity">ViewCelebrityActivity</string>
+    <string name="height">Height:</string>
+    <string name="nationality_hint">Celebrity\'s Nationality</string>
+    <string name="name_hint">Celebrity\'s Name</string>
+    <string name="view_celeb_header">Edit this Celebrity\'s Details</string>
+    <string name="title_activity_add_celebrity">AddCelebrityActivity</string>
+</resources>
