@@ -94,7 +94,7 @@ public class CelebDatabaseHelper extends SQLiteOpenHelper{
         cv.put(CelebDatabaseContract.COL_NATIONALITY, celeb.getNationality());
         cv.put(CelebDatabaseContract.COL_FAVORITE, celeb.getFavorite());
 
-        db.insert(CelebDatabaseContract.TABLE_NAME, null, cv);
+        db.insertWithOnConflict(CelebDatabaseContract.TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public void update(Celebrity celeb){

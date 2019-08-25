@@ -25,6 +25,10 @@ public class ViewCelebrityActivity extends AppCompatActivity implements AdapterV
     Spinner sFeet, sInches;
     DatePicker picker;
 
+    //datePicker.updateDate(2016, 5, 22);
+    //String text = mySpinner.getSelectedItem().toString();
+    //spinner.setSelection(39)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,9 @@ public class ViewCelebrityActivity extends AppCompatActivity implements AdapterV
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+//                builder.setMessage("Delete animal for database?").setPositiveButton("Yes", confirmation)
+//                        .setNegativeButton("No",confirmation).show();
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }

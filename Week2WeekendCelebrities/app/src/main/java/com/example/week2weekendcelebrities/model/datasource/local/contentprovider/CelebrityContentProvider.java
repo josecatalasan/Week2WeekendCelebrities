@@ -25,10 +25,8 @@ public class CelebrityContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         dbHelper = new CelebDatabaseHelper(getContext());
-        Celebrity celeb = new Celebrity("Jomar","5\'9\"", "3/12/1991", "Filipino");
-        dbHelper.insert(celeb);
-        celeb = new Celebrity("Jon Snow", "6\'0\"", "1/1/1990","English");
-        dbHelper.insert(celeb);
+        //init database
+        initDatabase();
         return true;
     }
 
@@ -101,6 +99,13 @@ public class CelebrityContentProvider extends ContentProvider {
         uriMatcher.addURI(CONTENT_AUTHORITY, PATH_CELEBRITY, CELEBRITY);
         uriMatcher.addURI(CONTENT_AUTHORITY, PATH_CELEBRITY+"/#", CELEBRITY_NAME);
         return uriMatcher;
+    }
+
+    private void initDatabase(){
+        Celebrity celeb = new Celebrity("Jomar","5\'9\"", "3/12/1991", "Filipino");
+        dbHelper.insert(celeb);
+        celeb = new Celebrity("Jon Snow", "6\'0\"", "1/1/1990","English");
+        dbHelper.insert(celeb);
     }
 }
 
