@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,6 +55,7 @@ public class CelebrityAdapter extends RecyclerView.Adapter<CelebrityAdapter.View
 
         private TextView tvName, tvHeight, tvBorn, tvNationality;
         private Celebrity itemCeleb;
+        private ToggleButton togFavorite;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -61,7 +63,18 @@ public class CelebrityAdapter extends RecyclerView.Adapter<CelebrityAdapter.View
             tvHeight = itemView.findViewById(R.id.tvHeight);
             tvBorn = itemView.findViewById(R.id.tvBorn);
             tvNationality = itemView.findViewById(R.id.tvNationality);
+            togFavorite = itemView.findViewById(R.id.togFavorite);
             itemView.setOnClickListener(this);
+
+            togFavorite.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    if(togFavorite.isChecked())
+                        itemCeleb.setFavorite(1);
+                    else
+                        itemCeleb.setFavorite(0);
+                }
+            });
         }
 
         public void setItemCeleb(Celebrity celeb){this.itemCeleb = celeb;}

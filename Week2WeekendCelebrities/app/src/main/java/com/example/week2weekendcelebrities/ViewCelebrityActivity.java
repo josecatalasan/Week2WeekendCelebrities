@@ -23,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import static com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract.CelebrityEntry.CELEBRITY_CONTENT_URI;
 import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_BORN;
@@ -95,25 +96,6 @@ public class ViewCelebrityActivity extends AppCompatActivity implements AdapterV
                 cv.put(COL_BORN, String.format("%d/%d/%d", picker.getMonth()+1,picker.getDayOfMonth(),picker.getYear()));
                 cv.put(COL_FAVORITE, 0);
                 getContentResolver().update(CELEBRITY_CONTENT_URI, cv, null, new String[]{tvName.getText().toString()});
-                //String text = mySpinner.getSelectedItem().toString();
-//                final AnimalDatabaseHelper dbHelper = new AnimalDatabaseHelper(view.getContext());
-//                DialogInterface.OnClickListener confirmation = new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int choice) {
-//                        switch(choice){
-//                            case DialogInterface.BUTTON_POSITIVE:
-//                                dbHelper.deleteAnimalInDB(itemAnimal.getName());
-//                                onDatabaseChange(dbHelper.getAllAnimal());
-//                                break;
-//                            case DialogInterface.BUTTON_NEGATIVE:
-//                                break;
-//                        }
-//
-//                    }
-//                };
-//                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-//                builder.setMessage("Update celebrity in database?").setPositiveButton("Yes", confirmation)
-//                        .setNegativeButton("No",confirmation).show();
             }
         });
 
