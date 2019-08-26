@@ -114,6 +114,16 @@ public class CelebrityContentProvider extends ContentProvider {
         dbHelper.insert(celeb);
         celeb = new Celebrity("Hugh Laurie", "6\' 2\"", "6/11/1959","English");
         dbHelper.insert(celeb);
+        celeb = new Celebrity("Melissa Fumero", "5\' 6\"", "8/19/1982","American");
+        dbHelper.insert(celeb);
+        celeb = new Celebrity("Jennifer Lawrence", "5\' 9\"", "8/15/1990","American");
+        dbHelper.insert(celeb);
+        celeb = new Celebrity("Jodie Whittaker", "5\' 6\"", "6/17/1972","English");
+        dbHelper.insert(celeb);
+        celeb = new Celebrity("Hatsune Miku", "5\' 3\"", "6/11/2007","Japanese");
+        dbHelper.insert(celeb);
+        celeb = new Celebrity("Spike Spiegel", "6\' 1\"", "6/26/1998","Japanese");
+        dbHelper.insert(celeb);
     }
 }
 
