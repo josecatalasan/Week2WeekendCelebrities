@@ -1,14 +1,19 @@
 package com.example.week2weekendcelebrities;
 
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import com.example.week2weekendcelebrities.model.celebrity.Celebrity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,17 +22,22 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import static com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract.CelebrityEntry.CELEBRITY_CONTENT_URI;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_BORN;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_FAVORITE;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_HEIGHT;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_NAME;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_NATIONALITY;
 
 public class ViewCelebrityActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private final String[] feet = {"4\'", "5\'", "6\'", "7\'", "8\'"};
     private final String[] inches = {"1\"","2\"","3\"","4\"","5\"","6\"","7\"","8\"","9\"","10\"","11\"","12\""};
-    EditText etName, etNationality;
+    TextView tvName;
+    EditText etNationality;
     Spinner sFeet, sInches;
     DatePicker picker;
-
-    //datePicker.updateDate(2016, 5, 22);
-    //String text = mySpinner.getSelectedItem().toString();
-    //spinner.setSelection(39)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,27 +48,76 @@ public class ViewCelebrityActivity extends AppCompatActivity implements AdapterV
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         bindViews();
+
+        //setup Spinners
         sFeet.setOnItemSelectedListener(this);
         sInches.setOnItemSelectedListener(this);
-        ArrayAdapter feetAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,feet);
+        ArrayAdapter feetAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, feet);
         feetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ArrayAdapter inchesAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, inches);
         inchesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         sFeet.setAdapter(feetAdapter);
         sInches.setAdapter(inchesAdapter);
 
-        FloatingActionButton fab = findViewById(R.id.fabAddCeleb);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fillFields();
+
+        FloatingActionButton deleteFab = findViewById(R.id.fabDeleteCeleb);
+        deleteFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-//                builder.setMessage("Delete animal for database?").setPositiveButton("Yes", confirmation)
-//                        .setNegativeButton("No",confirmation).show();
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                DialogInterface.OnClickListener confirmation = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int choice) {
+                        switch(choice){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //delete
+                                getContentResolver().delete(CELEBRITY_CONTENT_URI, null, new String[]{tvName.getText().toString()});
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                        }
+
+                    }
+                };
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("Delete celebrity for database?").setPositiveButton("Yes", confirmation)
+                        .setNegativeButton("No",confirmation).show();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FloatingActionButton updateFab = findViewById(R.id.fabUpdateCeleb);
+        updateFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContentValues cv = new ContentValues();
+                cv.put(COL_HEIGHT,sFeet.getSelectedItem().toString() + " " + sInches.getSelectedItem().toString());
+                cv.put(COL_NATIONALITY, etNationality.getText().toString());
+                cv.put(COL_BORN, String.format("%d/%d/%d", picker.getMonth()+1,picker.getDayOfMonth(),picker.getYear()));
+                cv.put(COL_FAVORITE, 0);
+                getContentResolver().update(CELEBRITY_CONTENT_URI, cv, null, new String[]{tvName.getText().toString()});
+                //String text = mySpinner.getSelectedItem().toString();
+//                final AnimalDatabaseHelper dbHelper = new AnimalDatabaseHelper(view.getContext());
+//                DialogInterface.OnClickListener confirmation = new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int choice) {
+//                        switch(choice){
+//                            case DialogInterface.BUTTON_POSITIVE:
+//                                dbHelper.deleteAnimalInDB(itemAnimal.getName());
+//                                onDatabaseChange(dbHelper.getAllAnimal());
+//                                break;
+//                            case DialogInterface.BUTTON_NEGATIVE:
+//                                break;
+//                        }
+//
+//                    }
+//                };
+//                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+//                builder.setMessage("Update celebrity in database?").setPositiveButton("Yes", confirmation)
+//                        .setNegativeButton("No",confirmation).show();
+            }
+        });
+
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -71,7 +130,7 @@ public class ViewCelebrityActivity extends AppCompatActivity implements AdapterV
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
             case R.id.resetFields:
-                resetFields();
+                fillFields();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -87,12 +146,34 @@ public class ViewCelebrityActivity extends AppCompatActivity implements AdapterV
 
     }
 
-    private void resetFields(){
+    private void fillFields(){
+        Celebrity celeb = getIntent().getExtras().getParcelable("celeb");
+        tvName.setText(celeb.getName());
+        etNationality.setText(celeb.getNationality());
+        //parse born
+        String born = celeb.getBorn();
+        String delims = "[/]";
+        String[] tokens = born.split(delims);
+        //datePicker.updateDate(2016, 5, 22);
+        picker.updateDate(Integer.parseInt(tokens[2]), Integer.parseInt(tokens[0])-1, Integer.parseInt(tokens[1]));
+        //parse height
 
+        //spinner.setSelection(39)
+        String height = celeb.getHeight();
+        delims = "[ ]";
+        tokens = height.split(delims);
+        for(int i=0; i<feet.length-1; i++){
+            if(tokens[0].equals(feet[i]))
+                sFeet.setSelection(i);
+        }
+        for(int i=0; i<inches.length-1;i++){
+            if(tokens[1].equals(inches[i]))
+                sInches.setSelection(i);
+        }
     }
 
     private void bindViews(){
-        etName = findViewById(R.id.etName);
+        tvName = findViewById(R.id.tvName);
         etNationality = findViewById(R.id.etNationality);
         sFeet = findViewById(R.id.spinnerFeet);
         sInches = findViewById(R.id.spinnerInches);

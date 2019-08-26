@@ -26,10 +26,20 @@
         android:id="@+id/fabDeleteCeleb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
+        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:maxImageSize="36dp"
         app:backgroundTint="@color/black"
         app:srcCompat="@drawable/ic_delete_24dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabUpdateCeleb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/fab_margin"
+        app:maxImageSize="56dp"
+        app:backgroundTint="@color/green"
+        app:srcCompat="@drawable/ic_update_24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

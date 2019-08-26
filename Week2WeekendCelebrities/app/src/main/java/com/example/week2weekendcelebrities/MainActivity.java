@@ -4,24 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
+import android.view.View;
 
 import com.example.week2weekendcelebrities.model.celebrity.Celebrity;
-import com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityContentProvider;
-import com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract;
 import com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-import static com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract.CONTENT_URI;
 import static com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract.CelebrityEntry.CELEBRITY_CONTENT_URI;
-import static com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract.CelebrityEntry.buildCelebUri;
 import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_BORN;
 import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_FAVORITE;
 import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_HEIGHT;
@@ -37,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getContentResolver().notifyChange(CELEBRITY_CONTENT_URI, null);
         //Query construction
         String[] projection = {COL_NAME, COL_HEIGHT, COL_BORN, COL_NATIONALITY, COL_FAVORITE};
         Cursor cursor = getContentResolver().query(CELEBRITY_CONTENT_URI, projection, null, null, COL_NAME);
@@ -49,6 +45,16 @@ public class MainActivity extends AppCompatActivity {
         rvCelebrities.setLayoutManager(layoutManager);
         CelebrityAdapter adapter = new CelebrityAdapter(celebList);
         rvCelebrities.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        FloatingActionButton fabAdd = findViewById(R.id.fabAddCeleb);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addIntent = new Intent(view.getContext() , AddCelebrityActivity.class);
+                startActivity(addIntent);
+            }
+        });
 
     }
 

@@ -13,6 +13,7 @@ import com.example.week2weekendcelebrities.model.datasource.local.database.Celeb
 import com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseHelper;
 
 import static com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract.CONTENT_AUTHORITY;
+import static com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract.CelebrityEntry.CELEBRITY_CONTENT_URI;
 import static com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract.PATH_CELEBRITY;
 import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_NAME;
 
@@ -56,6 +57,7 @@ public class CelebrityContentProvider extends ContentProvider {
                         sortby);
                 break;
         }
+        returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return returnCursor;
     }
 
@@ -84,6 +86,8 @@ public class CelebrityContentProvider extends ContentProvider {
     public int delete(Uri uri, String s, String[] strings) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int id = db.delete(CelebDatabaseContract.TABLE_NAME, COL_NAME + " = ?", strings);
+        final Uri newObjectUri = ContentUris.withAppendedId(CELEBRITY_CONTENT_URI,id);
+        getContext().getContentResolver().notifyChange(newObjectUri,null);
         return id;
     }
 
@@ -91,6 +95,8 @@ public class CelebrityContentProvider extends ContentProvider {
     public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int id = db.update(CelebDatabaseContract.TABLE_NAME,contentValues, COL_NAME + " = ?", strings);
+        final Uri newObjectUri = ContentUris.withAppendedId(CELEBRITY_CONTENT_URI,id);
+        getContext().getContentResolver().notifyChange(newObjectUri,null);
         return id;
     }
 
@@ -102,9 +108,11 @@ public class CelebrityContentProvider extends ContentProvider {
     }
 
     private void initDatabase(){
-        Celebrity celeb = new Celebrity("Jomar","5\'9\"", "3/12/1991", "Filipino");
+        Celebrity celeb = new Celebrity("Brad Pitt","5\' 11\"", "12/18/1963", "American");
         dbHelper.insert(celeb);
-        celeb = new Celebrity("Jon Snow", "6\'0\"", "1/1/1990","English");
+        celeb = new Celebrity("Edward Norton", "6\' 0\"", "8/18/1969","American");
+        dbHelper.insert(celeb);
+        celeb = new Celebrity("Hugh Laurie", "6\' 2\"", "6/11/1959","English");
         dbHelper.insert(celeb);
     }
 }

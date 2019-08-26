@@ -35,6 +35,8 @@ public class CelebrityAdapter extends RecyclerView.Adapter<CelebrityAdapter.View
         //fill views here
         holder.tvName.setText(currentCeleb.getName());
         holder.tvHeight.setText(currentCeleb.getHeight());
+        holder.tvBorn.setText(currentCeleb.getBorn());
+        holder.tvNationality.setText(currentCeleb.getNationality());
         holder.setItemCeleb(currentCeleb);
     }
 
@@ -50,13 +52,15 @@ public class CelebrityAdapter extends RecyclerView.Adapter<CelebrityAdapter.View
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView tvName, tvHeight;
+        private TextView tvName, tvHeight, tvBorn, tvNationality;
         private Celebrity itemCeleb;
 
         public ViewHolder(View itemView){
             super(itemView);
             tvName = itemView.findViewById(R.id.tvName);
             tvHeight = itemView.findViewById(R.id.tvHeight);
+            tvBorn = itemView.findViewById(R.id.tvBorn);
+            tvNationality = itemView.findViewById(R.id.tvNationality);
             itemView.setOnClickListener(this);
         }
 
@@ -67,7 +71,7 @@ public class CelebrityAdapter extends RecyclerView.Adapter<CelebrityAdapter.View
             //go to update activity
             Intent detailsIntent = new Intent(view.getContext(), ViewCelebrityActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putParcelable("animal", itemCeleb);
+            bundle.putParcelable("celeb", itemCeleb);
             detailsIntent.putExtras(bundle);
             view.getContext().startActivity(detailsIntent);
 

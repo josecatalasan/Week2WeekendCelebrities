@@ -2,13 +2,10 @@ package com.example.week2weekendcelebrities.model.datasource.local.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.week2weekendcelebrities.model.celebrity.Celebrity;
-
-import java.util.ArrayList;
 
 public class CelebDatabaseHelper extends SQLiteOpenHelper{
 
@@ -28,60 +25,6 @@ public class CelebDatabaseHelper extends SQLiteOpenHelper{
     }
 
     //Get all Celebrities
-    public ArrayList<Celebrity> getAllCelebrities(){
-        ArrayList<Celebrity> celebList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(CelebDatabaseContract.QUERY_SELECT_ALL,null);
-
-        if(cursor.moveToFirst()){
-            do{
-                Celebrity celeb = new Celebrity(
-                        cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_NAME)),
-                        cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_HEIGHT)),
-                        cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_BORN)),
-                        cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_NATIONALITY)));
-                celeb.setFavorite(cursor.getInt(cursor.getColumnIndex(CelebDatabaseContract.COL_FAVORITE)));
-                celebList.add(celeb);
-            } while(cursor.moveToNext());
-        }
-        return celebList;
-    }
-
-    //get all Favorites
-    public ArrayList<Celebrity> getAllFavorites(){
-        ArrayList<Celebrity> celebList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(CelebDatabaseContract.QUERY_SELECT_FAVORITES,null);
-
-        if(cursor.moveToFirst()){
-            do{
-                Celebrity celeb = new Celebrity(
-                        cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_NAME)),
-                        cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_HEIGHT)),
-                        cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_BORN)),
-                        cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_NATIONALITY)));
-                celeb.setFavorite(cursor.getInt(cursor.getColumnIndex(CelebDatabaseContract.COL_FAVORITE)));
-                celebList.add(celeb);
-            } while(cursor.moveToNext());
-        }
-        return celebList;
-    }
-
-    public Celebrity getCelebByName(String name){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(CelebDatabaseContract.QUERY_SELECT_BY_NAME(name),null);
-
-        if(cursor.moveToFirst()){
-            Celebrity celeb = new Celebrity(cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_NAME)),
-                    cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_HEIGHT)),
-                    cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_BORN)),
-                    cursor.getString(cursor.getColumnIndex(CelebDatabaseContract.COL_NATIONALITY)));
-            celeb.setFavorite(cursor.getInt(cursor.getColumnIndex(CelebDatabaseContract.COL_FAVORITE)));
-
-            return celeb;
-        }
-        return null;
-    }
 
     public void insert(Celebrity celeb){
         SQLiteDatabase db = this.getWritableDatabase();

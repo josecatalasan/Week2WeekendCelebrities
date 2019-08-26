@@ -1,5 +1,6 @@
 package com.example.week2weekendcelebrities;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,6 +20,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.week2weekendcelebrities.R;
+
+import static com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract.CelebrityEntry.CELEBRITY_CONTENT_URI;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_BORN;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_FAVORITE;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_HEIGHT;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_NAME;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_NATIONALITY;
 
 public class AddCelebrityActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private final String[] feet = {"4\'", "5\'", "6\'", "7\'", "8\'"};
@@ -49,8 +57,13 @@ public class AddCelebrityActivity extends AppCompatActivity implements AdapterVi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                ContentValues cv = new ContentValues();
+                cv.put(COL_NAME, etName.getText().toString());
+                cv.put(COL_HEIGHT,sFeet.getSelectedItem().toString() + " " + sInches.getSelectedItem().toString());
+                cv.put(COL_NATIONALITY, etNationality.getText().toString());
+                cv.put(COL_BORN, String.format("%d/%d/%d", picker.getMonth()+1,picker.getDayOfMonth(),picker.getYear()));
+                cv.put(COL_FAVORITE, 0);
+                getContentResolver().insert(CELEBRITY_CONTENT_URI, cv);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
