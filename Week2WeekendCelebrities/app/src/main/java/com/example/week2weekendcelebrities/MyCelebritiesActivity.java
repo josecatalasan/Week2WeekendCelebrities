@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.week2weekendcelebrities.model.celebrity.Celebrity;
 import com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract;
+import com.example.week2weekendcelebrities.model.datasource.local.fileaccess.FileIOUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -28,10 +31,24 @@ public class MyCelebritiesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_celebrities);
-
         dbInit();
-    }
 
+        FloatingActionButton fabWrite = findViewById(R.id.fabWrite);
+        fabWrite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FileIOUtil.writeToFile(view.getContext());
+            }
+        });
+
+        FloatingActionButton fabRead = findViewById(R.id.fabRead);
+        fabRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FileIOUtil.readFromFile(view.getContext());
+            }
+        });
+    }
 
     private ArrayList<Celebrity> buildList(Cursor cursor){
         ArrayList<Celebrity> list = new ArrayList<>();
