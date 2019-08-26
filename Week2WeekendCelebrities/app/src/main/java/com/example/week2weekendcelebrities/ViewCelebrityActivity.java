@@ -2,6 +2,7 @@ package com.example.week2weekendcelebrities;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.week2weekendcelebrities.model.celebrity.Celebrity;
@@ -65,7 +66,7 @@ public class ViewCelebrityActivity extends AppCompatActivity implements AdapterV
         FloatingActionButton deleteFab = findViewById(R.id.fabDeleteCeleb);
         deleteFab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 DialogInterface.OnClickListener confirmation = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int choice) {
@@ -73,6 +74,8 @@ public class ViewCelebrityActivity extends AppCompatActivity implements AdapterV
                             case DialogInterface.BUTTON_POSITIVE:
                                 //delete
                                 getContentResolver().delete(CELEBRITY_CONTENT_URI, null, new String[]{tvName.getText().toString()});
+                                Intent returnIntent = new Intent(view.getContext(), MainActivity.class);
+                                startActivity(returnIntent);
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;
@@ -94,8 +97,9 @@ public class ViewCelebrityActivity extends AppCompatActivity implements AdapterV
                 cv.put(COL_HEIGHT,sFeet.getSelectedItem().toString() + " " + sInches.getSelectedItem().toString());
                 cv.put(COL_NATIONALITY, etNationality.getText().toString());
                 cv.put(COL_BORN, String.format("%d/%d/%d", picker.getMonth()+1,picker.getDayOfMonth(),picker.getYear()));
-                cv.put(COL_FAVORITE, 0);
                 getContentResolver().update(CELEBRITY_CONTENT_URI, cv, null, new String[]{tvName.getText().toString()});
+                Intent returnIntent = new Intent(view.getContext(), MainActivity.class);
+                startActivity(returnIntent);
             }
         });
 

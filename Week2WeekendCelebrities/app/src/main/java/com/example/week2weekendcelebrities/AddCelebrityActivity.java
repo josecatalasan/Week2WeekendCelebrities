@@ -1,6 +1,7 @@
 package com.example.week2weekendcelebrities;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -64,6 +65,8 @@ public class AddCelebrityActivity extends AppCompatActivity implements AdapterVi
                 cv.put(COL_BORN, String.format("%d/%d/%d", picker.getMonth()+1,picker.getDayOfMonth(),picker.getYear()));
                 cv.put(COL_FAVORITE, 0);
                 getContentResolver().insert(CELEBRITY_CONTENT_URI, cv);
+                Intent returnIntent = new Intent(view.getContext(), MainActivity.class);
+                startActivity(returnIntent);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

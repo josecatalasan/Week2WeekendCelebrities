@@ -1,5 +1,6 @@
 package com.example.week2weekendcelebrities;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.week2weekendcelebrities.model.celebrity.Celebrity;
 
 import java.util.ArrayList;
+
+import static com.example.week2weekendcelebrities.model.datasource.local.contentprovider.CelebrityProviderContract.CelebrityEntry.CELEBRITY_CONTENT_URI;
+import static com.example.week2weekendcelebrities.model.datasource.local.database.CelebDatabaseContract.COL_FAVORITE;
 
 
 public class CelebrityAdapter extends RecyclerView.Adapter<CelebrityAdapter.ViewHolder>{
@@ -38,6 +42,7 @@ public class CelebrityAdapter extends RecyclerView.Adapter<CelebrityAdapter.View
         holder.tvHeight.setText(currentCeleb.getHeight());
         holder.tvBorn.setText(currentCeleb.getBorn());
         holder.tvNationality.setText(currentCeleb.getNationality());
+        holder.togFavorite.setChecked(currentCeleb.getFavorite()==1);
         holder.setItemCeleb(currentCeleb);
     }
 
@@ -73,6 +78,10 @@ public class CelebrityAdapter extends RecyclerView.Adapter<CelebrityAdapter.View
                         itemCeleb.setFavorite(1);
                     else
                         itemCeleb.setFavorite(0);
+                    ContentValues cv = new ContentValues();
+                    cv.put(COL_FAVORITE, itemCeleb.getFavorite());
+                    view.getContext().getContentResolver().update(CELEBRITY_CONTENT_URI, cv, null, new String[]{itemCeleb.getName()});
+                    notifyDataSetChanged();
                 }
             });
         }

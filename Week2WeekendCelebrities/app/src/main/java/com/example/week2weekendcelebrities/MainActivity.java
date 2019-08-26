@@ -1,13 +1,16 @@
 package com.example.week2weekendcelebrities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.week2weekendcelebrities.model.celebrity.Celebrity;
@@ -26,11 +29,15 @@ import static com.example.week2weekendcelebrities.model.datasource.local.databas
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView rvCelebrities;
+    CelebrityAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         getContentResolver().notifyChange(CELEBRITY_CONTENT_URI, null);
         //Query construction
@@ -43,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
         rvCelebrities = findViewById(R.id.rvCelebrities);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         rvCelebrities.setLayoutManager(layoutManager);
-        CelebrityAdapter adapter = new CelebrityAdapter(celebList);
-        rvCelebrities.setAdapter(adapter);
+        adapter = new CelebrityAdapter(celebList);
         adapter.notifyDataSetChanged();
+        rvCelebrities.setAdapter(adapter);
 
         FloatingActionButton fabAdd = findViewById(R.id.fabAddCeleb);
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +63,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.myFavorites:
+                //start my favorites
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private ArrayList<Celebrity> buildList(Cursor cursor){
